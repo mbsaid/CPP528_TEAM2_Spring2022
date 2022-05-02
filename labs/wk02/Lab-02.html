@@ -372,10 +372,11 @@ pre code {
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
 <p>Chapter 1 demonstrates how to access the Longitudinal Tract Data Base
-(LTDB) data dictionary. Three functions provide the ability to filter
-the large number of LTDB variables to select only those with a certain
-category title, where the description field contains a specified text
-string, or from a specific year.</p>
+(LTDB) data dictionary, which was wrangled from multiple decennial data
+files. Three functions demonstrate the ability to filter the large
+number of LTDB variables to select only those with a certain category
+title, where the description field contains a specified text string, or
+from a specific year.</p>
 <pre class="r"><code># load needed packages
 library( tidyverse )
 library( here )
@@ -384,14 +385,26 @@ library( pander )</code></pre>
 DD_FILEPATH &lt;- here::here( &quot;data/rodeo/LTDB-DATA-DICTIONARY.csv&quot; )
 
 # import data dictionary
-dd &lt;- read.csv( DD_FILEPATH, stringsAsFactors=F )</code></pre>
+dd &lt;- read.csv( DD_FILEPATH, stringsAsFactors=F )
+
+dd &lt;- select( dd, c( 1:14))
+
+dd[ dd == &quot;&quot; ] &lt;- NA</code></pre>
+</div>
+<div id="building-and-testing-filters" class="section level2">
+<h2>Building and Testing Filters</h2>
+<p><br></p>
+<div id="filter-by-category" class="section level3">
+<h3>Filter by category</h3>
 <pre class="r"><code># function filters by category
 
 filter_cat &lt;- function( data , search )
   
 {
   num &lt;- grep(search, data$category, ignore.case = T) 
+  
   dat.cat &lt;- data.frame(data[num,])
+  
   return( dat.cat )
 }</code></pre>
 <pre class="r"><code># test function 1, filtering for category &quot;age&quot;
@@ -496,103 +509,104 @@ filter_cat( dd, &quot;age&quot; )</code></pre>
 ## 137                                                                                                                                                                   percentage of persons age 75 years and over
 ## 164                                                                                                                                                      percentage of persons who speak English not well, age 5+
 ##      X1970.f  X1970.s  X1980.f  X1980.s  X1990.f  X1990.s  X2000.f  X2000.s
-## 1                              a15asn80 A15ASN90          A15ASN00         
-## 2   A15BLK70                   a15blk80 A15BLK90          A15BLK00         
-## 3                              a15hsp80 A15HSP90          A15HSP00         
-## 4                              a15ntv80 A15NTV90          A15NTV00         
-## 5   A15WHT70                   a15wht80 A15WHT90          A15WHT00         
-## 6   A18UND70          A18UND80          A18UND90          A18UND00         
-## 7                              a60asn80 A60ASN90          A60ASN00         
-## 8   A60BLK70                   a60blk80 A60BLK90          A60BLK00         
-## 9                              a60hsp80 A60HSP90          A60HSP00         
-## 10                             a60ntv80 A60NTV90          A60NTV00         
-## 11   A60UP70           A60UP80           A60UP90           A60UP00         
-## 12  A60WHT70                   a60wht80 A60WHT90          A60WHT00         
-## 13                                                                         
-## 14                                                                         
-## 15                                                                         
-## 16                                                                         
-## 17                                                                         
-## 18   A75UP70           A75UP80           A75UP90           A75UP00         
-## 19  AG15UP70          AG15UP80          AG15UP90                   AG15UP00
-## 20           AG16CV70          ag16cv80          AG16CV90                  
-## 21                                                                 AG18CV00
-## 22           AG25UP70          ag25up80          AG25UP90          AG25UP00
-## 23                              ag5up80           AG5UP90           AG5UP00
-## 24                             ageasn80 AGEASN90          AGEASN00         
-## 25  AGEBLK70                   ageblk80 AGEBLK90          AGEBLK00         
-## 26                             agehsp80 AGEHSP90          AGEHSP00         
-## 27                             agentv80 AGENTV90          AGENTV00         
-## 28  AGEWHT70                   agewht80 AGEWHT90          AGEWHT00         
-## 37           CNI16U70          cni16u80          CNI16U90          CNI16U00
-## 44           DFLABF70          dflabf80          DFLABF90          DFLABF00
-## 90                                lep80             LEP90             LEP00
-## 102          N65POV70          n65pov80          N65POV90          N65POV00
-## 119                             olang80           OLANG90           OLANG00
-## 123                                                                        
-## 124                                                                        
-## 125                                                                        
-## 126                                                                        
-## 127                                                                        
-## 128                                                                        
-## 130                                                                        
-## 131                                                                        
-## 132                                                                        
-## 133                                                                        
-## 134                                                                        
-## 135                                                                        
-## 136                                                                        
-## 137                                                                        
-## 164                                                                        
-##      X2010.f  X2010.s  X X.1 X.2 X.3 X.4 X.5 X.6 X.7
-## 1   a15asn10 a15asn12 NA  NA  NA  NA  NA  NA  NA  NA
-## 2   a15blk10 a15blk12 NA  NA  NA  NA  NA  NA  NA  NA
-## 3   a15hsp10 a15hsp12 NA  NA  NA  NA  NA  NA  NA  NA
-## 4   a15ntv10 a15ntv12 NA  NA  NA  NA  NA  NA  NA  NA
-## 5   a15wht10 a15wht12 NA  NA  NA  NA  NA  NA  NA  NA
-## 6   a18und10 a18und12 NA  NA  NA  NA  NA  NA  NA  NA
-## 7   a60asn10          NA  NA  NA  NA  NA  NA  NA  NA
-## 8   a60blk10          NA  NA  NA  NA  NA  NA  NA  NA
-## 9   a60hsp10          NA  NA  NA  NA  NA  NA  NA  NA
-## 10  a60ntv10          NA  NA  NA  NA  NA  NA  NA  NA
-## 11   a60up10  a60up12 NA  NA  NA  NA  NA  NA  NA  NA
-## 12  a60wht10          NA  NA  NA  NA  NA  NA  NA  NA
-## 13           a65asn12 NA  NA  NA  NA  NA  NA  NA  NA
-## 14           a65blk12 NA  NA  NA  NA  NA  NA  NA  NA
-## 15           a65hsp12 NA  NA  NA  NA  NA  NA  NA  NA
-## 16           a65ntv12 NA  NA  NA  NA  NA  NA  NA  NA
-## 17           a65wht12 NA  NA  NA  NA  NA  NA  NA  NA
-## 18   a75up10  a75up12 NA  NA  NA  NA  NA  NA  NA  NA
-## 19           ag15up12 NA  NA  NA  NA  NA  NA  NA  NA
-## 20                    NA  NA  NA  NA  NA  NA  NA  NA
-## 21           ag18cv12 NA  NA  NA  NA  NA  NA  NA  NA
-## 22           ag25up12 NA  NA  NA  NA  NA  NA  NA  NA
-## 23            ag5up12 NA  NA  NA  NA  NA  NA  NA  NA
-## 24  ageasn10 ageasn12 NA  NA  NA  NA  NA  NA  NA  NA
-## 25  ageblk10 ageblk12 NA  NA  NA  NA  NA  NA  NA  NA
-## 26  agehsp10 agehsp12 NA  NA  NA  NA  NA  NA  NA  NA
-## 27  agentv10 agentv12 NA  NA  NA  NA  NA  NA  NA  NA
-## 28  agewht10 agewht12 NA  NA  NA  NA  NA  NA  NA  NA
-## 37                    NA  NA  NA  NA  NA  NA  NA  NA
-## 44           dflabf12 NA  NA  NA  NA  NA  NA  NA  NA
-## 90              lep12 NA  NA  NA  NA  NA  NA  NA  NA
-## 102          n65pov12 NA  NA  NA  NA  NA  NA  NA  NA
-## 119           olang12 NA  NA  NA  NA  NA  NA  NA  NA
-## 123          p15asn12 NA  NA  NA  NA  NA  NA  NA  NA
-## 124          p15blk12 NA  NA  NA  NA  NA  NA  NA  NA
-## 125          p15hsp12 NA  NA  NA  NA  NA  NA  NA  NA
-## 126          p15ntv12 NA  NA  NA  NA  NA  NA  NA  NA
-## 127          p15wht12 NA  NA  NA  NA  NA  NA  NA  NA
-## 128          p18und12 NA  NA  NA  NA  NA  NA  NA  NA
-## 130           p60up12 NA  NA  NA  NA  NA  NA  NA  NA
-## 131          p65asn12 NA  NA  NA  NA  NA  NA  NA  NA
-## 132          p65blk12 NA  NA  NA  NA  NA  NA  NA  NA
-## 133          p65hsp12 NA  NA  NA  NA  NA  NA  NA  NA
-## 134          p65ntv12 NA  NA  NA  NA  NA  NA  NA  NA
-## 135          p65pov12 NA  NA  NA  NA  NA  NA  NA  NA
-## 136          p65wht12 NA  NA  NA  NA  NA  NA  NA  NA
-## 137           p75up12 NA  NA  NA  NA  NA  NA  NA  NA
-## 164            plep12 NA  NA  NA  NA  NA  NA  NA  NA</code></pre>
+## 1       &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt; a15asn80 A15ASN90     &lt;NA&gt; A15ASN00     &lt;NA&gt;
+## 2   A15BLK70     &lt;NA&gt;     &lt;NA&gt; a15blk80 A15BLK90     &lt;NA&gt; A15BLK00     &lt;NA&gt;
+## 3       &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt; a15hsp80 A15HSP90     &lt;NA&gt; A15HSP00     &lt;NA&gt;
+## 4       &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt; a15ntv80 A15NTV90     &lt;NA&gt; A15NTV00     &lt;NA&gt;
+## 5   A15WHT70     &lt;NA&gt;     &lt;NA&gt; a15wht80 A15WHT90     &lt;NA&gt; A15WHT00     &lt;NA&gt;
+## 6   A18UND70     &lt;NA&gt; A18UND80     &lt;NA&gt; A18UND90     &lt;NA&gt; A18UND00     &lt;NA&gt;
+## 7       &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt; a60asn80 A60ASN90     &lt;NA&gt; A60ASN00     &lt;NA&gt;
+## 8   A60BLK70     &lt;NA&gt;     &lt;NA&gt; a60blk80 A60BLK90     &lt;NA&gt; A60BLK00     &lt;NA&gt;
+## 9       &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt; a60hsp80 A60HSP90     &lt;NA&gt; A60HSP00     &lt;NA&gt;
+## 10      &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt; a60ntv80 A60NTV90     &lt;NA&gt; A60NTV00     &lt;NA&gt;
+## 11   A60UP70     &lt;NA&gt;  A60UP80     &lt;NA&gt;  A60UP90     &lt;NA&gt;  A60UP00     &lt;NA&gt;
+## 12  A60WHT70     &lt;NA&gt;     &lt;NA&gt; a60wht80 A60WHT90     &lt;NA&gt; A60WHT00     &lt;NA&gt;
+## 13      &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 14      &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 15      &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 16      &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 17      &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 18   A75UP70     &lt;NA&gt;  A75UP80     &lt;NA&gt;  A75UP90     &lt;NA&gt;  A75UP00     &lt;NA&gt;
+## 19  AG15UP70     &lt;NA&gt; AG15UP80     &lt;NA&gt; AG15UP90     &lt;NA&gt;     &lt;NA&gt; AG15UP00
+## 20      &lt;NA&gt; AG16CV70     &lt;NA&gt; ag16cv80     &lt;NA&gt; AG16CV90     &lt;NA&gt;     &lt;NA&gt;
+## 21      &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt; AG18CV00
+## 22      &lt;NA&gt; AG25UP70     &lt;NA&gt; ag25up80     &lt;NA&gt; AG25UP90     &lt;NA&gt; AG25UP00
+## 23      &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;  ag5up80     &lt;NA&gt;  AG5UP90     &lt;NA&gt;  AG5UP00
+## 24      &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt; ageasn80 AGEASN90     &lt;NA&gt; AGEASN00     &lt;NA&gt;
+## 25  AGEBLK70     &lt;NA&gt;     &lt;NA&gt; ageblk80 AGEBLK90     &lt;NA&gt; AGEBLK00     &lt;NA&gt;
+## 26      &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt; agehsp80 AGEHSP90     &lt;NA&gt; AGEHSP00     &lt;NA&gt;
+## 27      &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt; agentv80 AGENTV90     &lt;NA&gt; AGENTV00     &lt;NA&gt;
+## 28  AGEWHT70     &lt;NA&gt;     &lt;NA&gt; agewht80 AGEWHT90     &lt;NA&gt; AGEWHT00     &lt;NA&gt;
+## 37      &lt;NA&gt; CNI16U70     &lt;NA&gt; cni16u80     &lt;NA&gt; CNI16U90     &lt;NA&gt; CNI16U00
+## 44      &lt;NA&gt; DFLABF70     &lt;NA&gt; dflabf80     &lt;NA&gt; DFLABF90     &lt;NA&gt; DFLABF00
+## 90      &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;    lep80     &lt;NA&gt;    LEP90     &lt;NA&gt;    LEP00
+## 102     &lt;NA&gt; N65POV70     &lt;NA&gt; n65pov80     &lt;NA&gt; N65POV90     &lt;NA&gt; N65POV00
+## 119     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;  olang80     &lt;NA&gt;  OLANG90     &lt;NA&gt;  OLANG00
+## 123     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 124     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 125     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 126     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 127     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 128     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 130     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 131     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 132     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 133     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 134     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 135     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 136     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 137     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 164     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+##      X2010.f  X2010.s
+## 1   a15asn10 a15asn12
+## 2   a15blk10 a15blk12
+## 3   a15hsp10 a15hsp12
+## 4   a15ntv10 a15ntv12
+## 5   a15wht10 a15wht12
+## 6   a18und10 a18und12
+## 7   a60asn10     &lt;NA&gt;
+## 8   a60blk10     &lt;NA&gt;
+## 9   a60hsp10     &lt;NA&gt;
+## 10  a60ntv10     &lt;NA&gt;
+## 11   a60up10  a60up12
+## 12  a60wht10     &lt;NA&gt;
+## 13      &lt;NA&gt; a65asn12
+## 14      &lt;NA&gt; a65blk12
+## 15      &lt;NA&gt; a65hsp12
+## 16      &lt;NA&gt; a65ntv12
+## 17      &lt;NA&gt; a65wht12
+## 18   a75up10  a75up12
+## 19      &lt;NA&gt; ag15up12
+## 20      &lt;NA&gt;     &lt;NA&gt;
+## 21      &lt;NA&gt; ag18cv12
+## 22      &lt;NA&gt; ag25up12
+## 23      &lt;NA&gt;  ag5up12
+## 24  ageasn10 ageasn12
+## 25  ageblk10 ageblk12
+## 26  agehsp10 agehsp12
+## 27  agentv10 agentv12
+## 28  agewht10 agewht12
+## 37      &lt;NA&gt;     &lt;NA&gt;
+## 44      &lt;NA&gt; dflabf12
+## 90      &lt;NA&gt;    lep12
+## 102     &lt;NA&gt; n65pov12
+## 119     &lt;NA&gt;  olang12
+## 123     &lt;NA&gt; p15asn12
+## 124     &lt;NA&gt; p15blk12
+## 125     &lt;NA&gt; p15hsp12
+## 126     &lt;NA&gt; p15ntv12
+## 127     &lt;NA&gt; p15wht12
+## 128     &lt;NA&gt; p18und12
+## 130     &lt;NA&gt;  p60up12
+## 131     &lt;NA&gt; p65asn12
+## 132     &lt;NA&gt; p65blk12
+## 133     &lt;NA&gt; p65hsp12
+## 134     &lt;NA&gt; p65ntv12
+## 135     &lt;NA&gt; p65pov12
+## 136     &lt;NA&gt; p65wht12
+## 137     &lt;NA&gt;  p75up12
+## 164     &lt;NA&gt;   plep12</code></pre>
+<p><br> ### Filber by text in description field</p>
 <pre class="r"><code># function 2 filters by description text
 
 search_var &lt;- function(string)
@@ -603,459 +617,73 @@ these &lt;- grepl( string, vector, ignore.case=T )
 
 dat.sub &lt;- dd[ these, ]
 
+dat.sub &lt;- select( dat.sub, c( 5:14 ) )
+
+dat.sub &lt;- dat.sub[ !is.na( dat.sub )]
+
 return( dat.sub )
 
 }</code></pre>
-<pre class="r"><code># test function 2, filtering for word &quot;race&quot; in description text
+<pre class="r"><code># test function 2, returns all variables with the word &quot;race&quot; in description text
 
 search_var( &quot;race&quot;)</code></pre>
-<pre><code>##       root  root2       category
-## 1   a15asn a15asn       age-race
-## 2   a15blk a15blk       age-race
-## 4   a15ntv a15ntv       age-race
-## 5   a15wht a15wht       age-race
-## 8   a60blk a60blk       age-race
-## 10  a60ntv a60ntv       age-race
-## 12  a60wht a60wht       age-race
-## 14  a65blk a65blk       age-race
-## 16  a65ntv a65ntv       age-race
-## 29   asian  asian race-ethnicity
-## 30   black  black race-ethnicity
-## 35   china  china race-ethnicity
-## 56   filip  filip race-ethnicity
-## 64     haw    haw race-ethnicity
-## 83   india  india race-ethnicity
-## 88   japan  japan race-ethnicity
-## 89   korea  korea race-ethnicity
-## 107  nhblk  nhblk race-ethnicity
-## 109  nhwht  nhwht race-ethnicity
-## 112    ntv    ntv race-ethnicity
-## 123 p15asn p15asn       age-race
-## 124 p15blk p15blk       age-race
-## 126 p15ntv p15ntv       age-race
-## 127 p15wht p15wht       age-race
-## 132 p65blk p65blk       age-race
-## 134 p65ntv p65ntv       age-race
-## 139 pasian pasian       race-ses
-## 141 pchina pchina race-ethnicity
-## 146 pfilip pfilip race-ethnicity
-## 151   phaw   phaw race-ethnicity
-## 155 pindia pindia race-ethnicity
-## 160 pjapan pjapan race-ethnicity
-## 161 pkorea pkorea race-ethnicity
-## 171 pnhblk pnhblk race-ethnicity
-## 173   pntv   pntv race-ethnicity
-## 194  pviet  pviet race-ethnicity
-## 209   viet   viet race-ethnicity
-## 211  white  white race-ethnicity
-##                                                                                                                                                                                                        definition
-## 1                                             0-15 years old of Asians and Pacific Islanders (in 1980, 0-14 years old of Asians/Pacific Islanders; in 2008-12 ACS, 0-14 years old of Asian/Pacific Islander race)
-## 2                                                                                             0-15 years old of black race (in 1980, 0-14 years old of black race; in 2006- 10 ACS, 0-14 years old of black race)
-## 4                                                                0-15 years old of Native American race (in 1980, 0-14 years old of Native American race; in 2008-12 ACS, 0-14 years old of Native American race)
-## 5                                                                                             0-15 years old of white race (in 1980, 0-14 years old of white race; in 2006- 10 ACS, 0-14 years old of white race)
-## 8                                                                                                                                                                                60 years and older of black race
-## 10                                                                                                                                                                     60 years and older of Native American race
-## 12                                                                                                                                                                               60 years and older of white race
-## 14                                                                                                                                                                               65 years and older of black race
-## 16                                                                                                                                                                     65 years and older of Native American race
-## 29                                                                                                                                                                   persons of Asian race (and Pacific Islander)
-## 30                                                                                                                                                                                          persons of black race
-## 35                                                                                                                                                                                        persons of Chinese race
-## 56                                                                                                                                                                                       persons of Filipino race
-## 64                                                                                                                                                                                       persons of Hawaiian race
-## 83                                                                                                                                                                                   persons of Asian Indian race
-## 88                                                                                                                                                                                       persons of Japanese race
-## 89                                                                                                                                                                                         persons of Korean race
-## 107                                                                                                                                                                    persons of black race, not Hispanic origin
-## 109                                                                                                                                                                    persons of white race, not Hispanic origin
-## 112                                                                                                                                                                               persons of Native American race
-## 123 percentage of 0-15 years old of Asians and Pacific Islanders (in 1980, percentage of 0-14 years old of Asians/Pacific Islanders; in 2008-12 ACS, percentage of 0-14 years old of Asian/Pacific Islander race)
-## 124                                                  percentage of 0-15 years old of black race (in 1980, percentage of 0-14 years old of black race; in 2008-12 ACS, percentage of 0-14 years old of black race)
-## 126                    percentage of 0-15 years old of Native American race (in 1980, percentage of 0-14 years old of Native American race; in 2008-12 ACS, percentage of 0-14 years old of Native American race)
-## 127                                                  percentage of 0-15 years old of white race (in 1980, percentage of 0-14 years old of white race; in 2008-12 ACS, percentage of 0-14 years old of white race)
-## 132                                                                                                                                                                percentage of 65 years and older of black race
-## 134                                                                                                                                                      percentage of 65 years and older of Native American race
-## 139                                                                                                                                                    percentage of persons of Asian race (and Pacific Islander)
-## 141                                                                                                                                                                         percentage of persons of Chinese race
-## 146                                                                                                                                                                        percentage of persons of Filipino race
-## 151                                                                                                                                                                        percentage of persons of Hawaiian race
-## 155                                                                                                                                                                    percentage of persons of Asian Indian race
-## 160                                                                                                                                                                        percentage of persons of Japanese race
-## 161                                                                                                                                                                          percentage of persons of Korean race
-## 171                                                                                                                                                      percentage of persons of black race, not Hispanic origin
-## 173                                                                                                                                                                 percentage of persons of Native American race
-## 194                                                                                                                                                                                    percentage Vietnamese race
-## 209                                                                                                                                                                                    persons of Vietnamese race
-## 211                                                                                                                                                                                         persons of white race
-##      X1970.f X1970.s X1980.f  X1980.s  X1990.f X1990.s  X2000.f X2000.s
-## 1                            a15asn80 A15ASN90         A15ASN00        
-## 2   A15BLK70                 a15blk80 A15BLK90         A15BLK00        
-## 4                            a15ntv80 A15NTV90         A15NTV00        
-## 5   A15WHT70                 a15wht80 A15WHT90         A15WHT00        
-## 8   A60BLK70                 a60blk80 A60BLK90         A60BLK00        
-## 10                           a60ntv80 A60NTV90         A60NTV00        
-## 12  A60WHT70                 a60wht80 A60WHT90         A60WHT00        
-## 14                                                                     
-## 16                                                                     
-## 29   ASIAN70         ASIAN80           ASIAN90          ASIAN00        
-## 30   BLACK70                                                           
-## 35   CHINA70         CHINA80           CHINA90          CHINA00        
-## 56   FILIP70         FILIP80           FILIP90          FILIP00        
-## 64     HAW70           HAW80             HAW90            HAW00        
-## 83   INDIA70         INDIA80           INDIA90          INDIA00        
-## 88   JAPAN70         JAPAN80           JAPAN90          JAPAN00        
-## 89   KOREA70         KOREA80           KOREA90          KOREA00        
-## 107                  NHBLK80           NHBLK90          NHBLK00        
-## 109                  NHWHT80           NHWHT90          NHWHT00        
-## 112                    NTV80             NTV90            NTV00        
-## 123                                                                    
-## 124                                                                    
-## 126                                                                    
-## 127                                                                    
-## 132                                                                    
-## 134                                                                    
-## 139                                                                    
-## 141                                                                    
-## 146                                                                    
-## 151                                                                    
-## 155                                                                    
-## 160                                                                    
-## 161                                                                    
-## 171                                                                    
-## 173                                                                    
-## 194                                                                    
-## 209                   VIET80            VIET90           VIET00        
-## 211  WHITE70                                                           
-##      X2010.f  X2010.s  X X.1 X.2 X.3 X.4 X.5 X.6 X.7
-## 1   a15asn10 a15asn12 NA  NA  NA  NA  NA  NA  NA  NA
-## 2   a15blk10 a15blk12 NA  NA  NA  NA  NA  NA  NA  NA
-## 4   a15ntv10 a15ntv12 NA  NA  NA  NA  NA  NA  NA  NA
-## 5   a15wht10 a15wht12 NA  NA  NA  NA  NA  NA  NA  NA
-## 8   a60blk10          NA  NA  NA  NA  NA  NA  NA  NA
-## 10  a60ntv10          NA  NA  NA  NA  NA  NA  NA  NA
-## 12  a60wht10          NA  NA  NA  NA  NA  NA  NA  NA
-## 14           a65blk12 NA  NA  NA  NA  NA  NA  NA  NA
-## 16           a65ntv12 NA  NA  NA  NA  NA  NA  NA  NA
-## 29   asian10  asian12 NA  NA  NA  NA  NA  NA  NA  NA
-## 30                    NA  NA  NA  NA  NA  NA  NA  NA
-## 35   china10  china12 NA  NA  NA  NA  NA  NA  NA  NA
-## 56   filip10  filip12 NA  NA  NA  NA  NA  NA  NA  NA
-## 64     haw10    haw12 NA  NA  NA  NA  NA  NA  NA  NA
-## 83   india10  india12 NA  NA  NA  NA  NA  NA  NA  NA
-## 88   japan10  japan12 NA  NA  NA  NA  NA  NA  NA  NA
-## 89   korea10  korea12 NA  NA  NA  NA  NA  NA  NA  NA
-## 107  nhblk10  nhblk12 NA  NA  NA  NA  NA  NA  NA  NA
-## 109  nhwht10  nhwht12 NA  NA  NA  NA  NA  NA  NA  NA
-## 112    ntv10    ntv12 NA  NA  NA  NA  NA  NA  NA  NA
-## 123          p15asn12 NA  NA  NA  NA  NA  NA  NA  NA
-## 124          p15blk12 NA  NA  NA  NA  NA  NA  NA  NA
-## 126          p15ntv12 NA  NA  NA  NA  NA  NA  NA  NA
-## 127          p15wht12 NA  NA  NA  NA  NA  NA  NA  NA
-## 132          p65blk12 NA  NA  NA  NA  NA  NA  NA  NA
-## 134          p65ntv12 NA  NA  NA  NA  NA  NA  NA  NA
-## 139          pasian12 NA  NA  NA  NA  NA  NA  NA  NA
-## 141          pchina12 NA  NA  NA  NA  NA  NA  NA  NA
-## 146          pfilip12 NA  NA  NA  NA  NA  NA  NA  NA
-## 151            phaw12 NA  NA  NA  NA  NA  NA  NA  NA
-## 155          pindia12 NA  NA  NA  NA  NA  NA  NA  NA
-## 160          pjapan12 NA  NA  NA  NA  NA  NA  NA  NA
-## 161          pkorea12 NA  NA  NA  NA  NA  NA  NA  NA
-## 171          pnhblk12 NA  NA  NA  NA  NA  NA  NA  NA
-## 173            pntv12 NA  NA  NA  NA  NA  NA  NA  NA
-## 194           pviet12 NA  NA  NA  NA  NA  NA  NA  NA
-## 209   viet10   viet12 NA  NA  NA  NA  NA  NA  NA  NA
-## 211                   NA  NA  NA  NA  NA  NA  NA  NA</code></pre>
-<pre class="r"><code># function 3 filters by year
+<pre><code>##   [1] &quot;A15BLK70&quot; &quot;A15WHT70&quot; &quot;A60BLK70&quot; &quot;A60WHT70&quot; &quot;ASIAN70&quot;  &quot;BLACK70&quot; 
+##   [7] &quot;CHINA70&quot;  &quot;FILIP70&quot;  &quot;HAW70&quot;    &quot;INDIA70&quot;  &quot;JAPAN70&quot;  &quot;KOREA70&quot; 
+##  [13] &quot;WHITE70&quot;  &quot;ASIAN80&quot;  &quot;CHINA80&quot;  &quot;FILIP80&quot;  &quot;HAW80&quot;    &quot;INDIA80&quot; 
+##  [19] &quot;JAPAN80&quot;  &quot;KOREA80&quot;  &quot;NHBLK80&quot;  &quot;NHWHT80&quot;  &quot;NTV80&quot;    &quot;VIET80&quot;  
+##  [25] &quot;a15asn80&quot; &quot;a15blk80&quot; &quot;a15ntv80&quot; &quot;a15wht80&quot; &quot;a60blk80&quot; &quot;a60ntv80&quot;
+##  [31] &quot;a60wht80&quot; &quot;A15ASN90&quot; &quot;A15BLK90&quot; &quot;A15NTV90&quot; &quot;A15WHT90&quot; &quot;A60BLK90&quot;
+##  [37] &quot;A60NTV90&quot; &quot;A60WHT90&quot; &quot;ASIAN90&quot;  &quot;CHINA90&quot;  &quot;FILIP90&quot;  &quot;HAW90&quot;   
+##  [43] &quot;INDIA90&quot;  &quot;JAPAN90&quot;  &quot;KOREA90&quot;  &quot;NHBLK90&quot;  &quot;NHWHT90&quot;  &quot;NTV90&quot;   
+##  [49] &quot;VIET90&quot;   &quot;A15ASN00&quot; &quot;A15BLK00&quot; &quot;A15NTV00&quot; &quot;A15WHT00&quot; &quot;A60BLK00&quot;
+##  [55] &quot;A60NTV00&quot; &quot;A60WHT00&quot; &quot;ASIAN00&quot;  &quot;CHINA00&quot;  &quot;FILIP00&quot;  &quot;HAW00&quot;   
+##  [61] &quot;INDIA00&quot;  &quot;JAPAN00&quot;  &quot;KOREA00&quot;  &quot;NHBLK00&quot;  &quot;NHWHT00&quot;  &quot;NTV00&quot;   
+##  [67] &quot;VIET00&quot;   &quot;a15asn10&quot; &quot;a15blk10&quot; &quot;a15ntv10&quot; &quot;a15wht10&quot; &quot;a60blk10&quot;
+##  [73] &quot;a60ntv10&quot; &quot;a60wht10&quot; &quot;asian10&quot;  &quot;china10&quot;  &quot;filip10&quot;  &quot;haw10&quot;   
+##  [79] &quot;india10&quot;  &quot;japan10&quot;  &quot;korea10&quot;  &quot;nhblk10&quot;  &quot;nhwht10&quot;  &quot;ntv10&quot;   
+##  [85] &quot;viet10&quot;   &quot;a15asn12&quot; &quot;a15blk12&quot; &quot;a15ntv12&quot; &quot;a15wht12&quot; &quot;a65blk12&quot;
+##  [91] &quot;a65ntv12&quot; &quot;asian12&quot;  &quot;china12&quot;  &quot;filip12&quot;  &quot;haw12&quot;    &quot;india12&quot; 
+##  [97] &quot;japan12&quot;  &quot;korea12&quot;  &quot;nhblk12&quot;  &quot;nhwht12&quot;  &quot;ntv12&quot;    &quot;p15asn12&quot;
+## [103] &quot;p15blk12&quot; &quot;p15ntv12&quot; &quot;p15wht12&quot; &quot;p65blk12&quot; &quot;p65ntv12&quot; &quot;pasian12&quot;
+## [109] &quot;pchina12&quot; &quot;pfilip12&quot; &quot;phaw12&quot;   &quot;pindia12&quot; &quot;pjapan12&quot; &quot;pkorea12&quot;
+## [115] &quot;pnhblk12&quot; &quot;pntv12&quot;   &quot;pviet12&quot;  &quot;viet12&quot;</code></pre>
+<p><br></p>
+</div>
+<div id="filter-by-year" class="section level3">
+<h3>Filter by year</h3>
+<pre class="r"><code># function 3 filters by year, returns variables available for that year
 
 filter_year &lt;- function( year )
 {
   
-  dd.year &lt;- dd %&gt;% dplyr::select( contains( year ))
+  dd.year &lt;- dd %&gt;% dplyr::select( contains( year ) )
   
+  dd.year &lt;- dd.year[ !is.na( dd.year )]
+
   return( dd.year )
   
 }</code></pre>
 <pre class="r"><code># test function 3, filtering for year 1970
 
 filter_year( &quot;1970&quot; )</code></pre>
-<pre><code>##       X1970.f   X1970.s
-## 1                      
-## 2    A15BLK70          
-## 3                      
-## 4                      
-## 5    A15WHT70          
-## 6    A18UND70          
-## 7                      
-## 8    A60BLK70          
-## 9                      
-## 10                     
-## 11    A60UP70          
-## 12   A60WHT70          
-## 13                     
-## 14                     
-## 15                     
-## 16                     
-## 17                     
-## 18    A75UP70          
-## 19   AG15UP70          
-## 20             AG16CV70
-## 21                     
-## 22             AG25UP70
-## 23                     
-## 24                     
-## 25   AGEBLK70          
-## 26                     
-## 27                     
-## 28   AGEWHT70          
-## 29    ASIAN70          
-## 30    BLACK70          
-## 31     cbsa10    cbsa10
-## 32                     
-## 33   ccflag10  ccflag10
-## 34                     
-## 35    CHINA70          
-## 36                CLF70
-## 37             CNI16U70
-## 38                COL70
-## 39     county    county
-## 40              CUBAN70
-## 41                     
-## 42              DBPOV70
-## 43                     
-## 44             DFLABF70
-## 45             DFMPOV70
-## 46                     
-## 47                DIS70
-## 48   DMULTI70          
-## 49                     
-## 50               DPOV70
-## 51              DWPOV70
-## 52             EMPCLF70
-## 53             FAMILY70
-## 54                 FB70
-## 55                FHH70
-## 56    FILIP70          
-## 57              FLABF70
-## 58              GEANC70
-## 59               GEFB70
-## 60                     
-## 61                     
-## 62             H10YRS70
-## 63             H30OLD70
-## 64      HAW70          
-## 65                 HH70
-## 66                     
-## 67                     
-## 68                     
-## 69                     
-## 70               HINC70
-## 71                     
-## 72                     
-## 73                     
-## 74                     
-## 75                     
-## 76                 HS70
-## 77       HU70          
-## 78                     
-## 79               HU70SP
-## 80                     
-## 81                     
-## 82              INCPC70
-## 83    INDIA70          
-## 84              IRANC70
-## 85               IRFB70
-## 86              ITANC70
-## 87               ITFB70
-## 88    JAPAN70          
-## 89    KOREA70          
-## 90                     
-## 91              MANUF70
-## 92     Mar-70          
-## 93                     
-## 94                     
-## 95   metdiv10  metdiv10
-## 96                     
-## 97                MEX70
-## 98             MHMVAL70
-## 99              MRENT70
-## 100   MULTI70          
-## 101            N10IMM70
-## 102            N65POV70
-## 103                    
-## 104               NAT70
-## 105             NBPOV70
-## 106            NFMPOV70
-## 107                    
-## 108                    
-## 109                    
-## 110                    
-## 111              NPOV70
-## 112                    
-## 113             NWPOV70
-## 114     OHU70          
-## 115                    
-## 116             OHU70SP
-## 117                    
-## 118                    
-## 119                    
-## 120     OWN70          
-## 121                    
-## 122                    
-## 123                    
-## 124                    
-## 125                    
-## 126                    
-## 127                    
-## 128                    
-## 129                    
-## 130                    
-## 131                    
-## 132                    
-## 133                    
-## 134                    
-## 135                    
-## 136                    
-## 137                    
-## 138                    
-## 139                    
-## 140                    
-## 141                    
-## 142                    
-## 143                    
-## 144                    
-## 145                    
-## 146                    
-## 147                    
-## 148                    
-## 149                    
-## 150                    
-## 151                    
-## 152                    
-## 153                    
-## 154                    
-## 155                    
-## 156                    
-## 157                    
-## 158                    
-## 159                    
-## 160                    
-## 161                    
-## 162 placefp10 placefp10
-## 163                    
-## 164                    
-## 165                    
-## 166                    
-## 167                    
-## 168                    
-## 169                    
-## 170                    
-## 171                    
-## 172                    
-## 173                    
-## 174                    
-## 175     POP70          
-## 176                    
-## 177                    
-## 178            POP70SP1
-## 179            POP70SP2
-## 180                    
-## 181                    
-## 182                    
-## 183                    
-## 184                PR70
-## 185              PROF70
-## 186                    
-## 187                    
-## 188                    
-## 189                    
-## 190                    
-## 191                    
-## 192                    
-## 193                    
-## 194                    
-## 195                    
-## 196                    
-## 197    RENT70          
-## 198             RUANC70
-## 199              RUFB70
-## 200             SCANC70
-## 201              SCFB70
-## 202              SEMP70
-## 203     state     state
-## 204     tract     tract
-## 205   TRTID10   TRTID10
-## 206             UNEMP70
-## 207     VAC70          
-## 208               VET70
-## 209                    
-## 210     WDS70          
-## 211   WHITE70          
-## 212                    
-## 213                    
-## 214                    
-## 215                    
-## 216                    
-## 217                    
-## 218                    
-## 219                    
-## 220                    
-## 221                    
-## 222                    
-## 223                    
-## 224                    
-## 225                    
-## 226                    
-## 227                    
-## 228                    
-## 229                    
-## 230                    
-## 231                    
-## 232                    
-## 233                    
-## 234                    
-## 235                    
-## 236                    
-## 237                    
-## 238                    
-## 239                    
-## 240                    
-## 241                    
-## 242                    
-## 243                    
-## 244                    
-## 245                    
-## 246                    
-## 247                    
-## 248                    
-## 249                    
-## 250                    
-## 251                    
-## 252                    
-## 253                    
-## 254                    
-## 255                    
-## 256                    
-## 257                    
-## 258                    
-## 259                    
-## 260                    
-## 261                    
-## 262                    
-## 263                    
-## 264                    
-## 265                    
-## 266                    
-## 267                    
-## 268                    
-## 269                    
-## 270                    
-## 271                    
-## 272                    
-## 273                    
-## 274                    
-## 275                    
-## 276                    
-## 277</code></pre>
+<pre><code>##  [1] &quot;A15BLK70&quot;  &quot;A15WHT70&quot;  &quot;A18UND70&quot;  &quot;A60BLK70&quot;  &quot;A60UP70&quot;   &quot;A60WHT70&quot; 
+##  [7] &quot;A75UP70&quot;   &quot;AG15UP70&quot;  &quot;AGEBLK70&quot;  &quot;AGEWHT70&quot;  &quot;ASIAN70&quot;   &quot;BLACK70&quot;  
+## [13] &quot;cbsa10&quot;    &quot;ccflag10&quot;  &quot;CHINA70&quot;   &quot;county&quot;    &quot;DMULTI70&quot;  &quot;FILIP70&quot;  
+## [19] &quot;HAW70&quot;     &quot;HU70&quot;      &quot;INDIA70&quot;   &quot;JAPAN70&quot;   &quot;KOREA70&quot;   &quot;Mar-70&quot;   
+## [25] &quot;metdiv10&quot;  &quot;MULTI70&quot;   &quot;OHU70&quot;     &quot;OWN70&quot;     &quot;placefp10&quot; &quot;POP70&quot;    
+## [31] &quot;RENT70&quot;    &quot;state&quot;     &quot;tract&quot;     &quot;TRTID10&quot;   &quot;VAC70&quot;     &quot;WDS70&quot;    
+## [37] &quot;WHITE70&quot;   &quot;AG16CV70&quot;  &quot;AG25UP70&quot;  &quot;cbsa10&quot;    &quot;ccflag10&quot;  &quot;CLF70&quot;    
+## [43] &quot;CNI16U70&quot;  &quot;COL70&quot;     &quot;county&quot;    &quot;CUBAN70&quot;   &quot;DBPOV70&quot;   &quot;DFLABF70&quot; 
+## [49] &quot;DFMPOV70&quot;  &quot;DIS70&quot;     &quot;DPOV70&quot;    &quot;DWPOV70&quot;   &quot;EMPCLF70&quot;  &quot;FAMILY70&quot; 
+## [55] &quot;FB70&quot;      &quot;FHH70&quot;     &quot;FLABF70&quot;   &quot;GEANC70&quot;   &quot;GEFB70&quot;    &quot;H10YRS70&quot; 
+## [61] &quot;H30OLD70&quot;  &quot;HH70&quot;      &quot;HINC70&quot;    &quot;HS70&quot;      &quot;HU70SP&quot;    &quot;INCPC70&quot;  
+## [67] &quot;IRANC70&quot;   &quot;IRFB70&quot;    &quot;ITANC70&quot;   &quot;ITFB70&quot;    &quot;MANUF70&quot;   &quot;metdiv10&quot; 
+## [73] &quot;MEX70&quot;     &quot;MHMVAL70&quot;  &quot;MRENT70&quot;   &quot;N10IMM70&quot;  &quot;N65POV70&quot;  &quot;NAT70&quot;    
+## [79] &quot;NBPOV70&quot;   &quot;NFMPOV70&quot;  &quot;NPOV70&quot;    &quot;NWPOV70&quot;   &quot;OHU70SP&quot;   &quot;placefp10&quot;
+## [85] &quot;POP70SP1&quot;  &quot;POP70SP2&quot;  &quot;PR70&quot;      &quot;PROF70&quot;    &quot;RUANC70&quot;   &quot;RUFB70&quot;   
+## [91] &quot;SCANC70&quot;   &quot;SCFB70&quot;    &quot;SEMP70&quot;    &quot;state&quot;     &quot;tract&quot;     &quot;TRTID10&quot;  
+## [97] &quot;UNEMP70&quot;   &quot;VET70&quot;</code></pre>
+</div>
 </div>
 
 

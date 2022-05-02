@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Introduction
-Chapter 1 demonstrates how to access the Longitudinal Tract Data Base (LTDB) data dictionary. Three functions provide the ability to filter the large number of LTDB variables to select only those with a certain category title, where the description field contains a specified text string, or from a specific year.
+Chapter 1 demonstrates how to access the Longitudinal Tract Data Base (LTDB) data dictionary, which was wrangled from multiple decennial data files. Three functions demonstrate the ability to filter the large number of LTDB variables to select only those with a certain category title, where the description field contains a specified text string, or from a specific year.
 
 
 ```{r, message=FALSE, warning=FALSE }
@@ -33,9 +33,17 @@ DD_FILEPATH <- here::here( "data/rodeo/LTDB-DATA-DICTIONARY.csv" )
 # import data dictionary
 dd <- read.csv( DD_FILEPATH, stringsAsFactors=F )
 
+dd <- select( dd, c( 1:14))
+
+dd[ dd == "" ] <- NA
+
 ```
 
+## Building and Testing Filters
 
+<br>
+
+### Filter by category
 
 ```{r}
 
@@ -45,7 +53,9 @@ filter_cat <- function( data , search )
   
 {
   num <- grep(search, data$category, ignore.case = T) 
+  
   dat.cat <- data.frame(data[num,])
+  
   return( dat.cat )
 }
 
@@ -58,6 +68,9 @@ filter_cat <- function( data , search )
 filter_cat( dd, "age" )
 
 ```
+<br>
+### Filber by text in description field
+
 
 ```{r}
 # function 2 filters by description text
@@ -70,6 +83,10 @@ these <- grepl( string, vector, ignore.case=T )
 
 dat.sub <- dd[ these, ]
 
+dat.sub <- select( dat.sub, c( 5:14 ) )
+
+dat.sub <- dat.sub[ !is.na( dat.sub )]
+
 return( dat.sub )
 
 }
@@ -78,23 +95,26 @@ return( dat.sub )
 
 
 ```{r}
-# test function 2, filtering for word "race" in description text
+# test function 2, returns all variables with the word "race" in description text
 
 search_var( "race")
 
 ```
+<br>
 
-
+### Filter by year
 
 
 ```{r}
-# function 3 filters by year
+# function 3 filters by year, returns variables available for that year
 
 filter_year <- function( year )
 {
   
-  dd.year <- dd %>% dplyr::select( contains( year ))
+  dd.year <- dd %>% dplyr::select( contains( year ) )
   
+  dd.year <- dd.year[ !is.na( dd.year )]
+
   return( dd.year )
   
 }
