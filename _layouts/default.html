@@ -30,7 +30,7 @@ href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   {% if site.navigation %}<nav>{% for path in site.navigation %}{% assign node = site.pages | where: "name", path | first %}<a href="{{ node.url | relative_url }}">{{ node.title }}</a>{% endfor %}</nav>{% endif %}
   <nav>
     {% if site.icons %}{% for link in site.icons %}<a class="icon" style="font-size: 1.7em;" href="{{ link[1] }}{{page.path}}" target="_blank"><svg><use xlink:href="{{ "/assets/fontawesome/icons.svg" | relative_url }}#{{ link[0] }}"></use></svg></a>{% endfor %}{% endif %}
-    
+ <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | relative_url }}">      
   </nav> 
 </header>
 
