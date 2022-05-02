@@ -43,14 +43,3 @@ theme: jekyll-theme-architect
 #site-css:
 # - "/assets/css/style.scss"
 
-# Personalize the colors in your website. Colour values can be any valid CSS colour
-
-navbar-col: "#373C99"
-navbar-text-col: "#91A7FE"
-navbar-children-col: "#FE9D8D"
-page-col: "#FDECBE"
-link-col: "EB6B78"
-hover-col: "#FE9D8D"
-footer-col: "#F5F5F5"
-footer-text-col: "#373C99"
-footer-link-col: "#91A7FE"
