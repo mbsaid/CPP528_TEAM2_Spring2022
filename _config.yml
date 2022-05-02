@@ -29,7 +29,7 @@ comments:                    # embed disqus or isso comments
 #  disqus: "disqus-contrast"
 #  isso: "comments.mysite.org"
 
-remote_theme: pages-themes/architect@v0.2.0
+remote_theme: niklasbuschmann/contrast
 
 plugins: 
  - jekyll-remote-theme
@@ -37,7 +37,7 @@ plugins:
  - jekyll-paginate
  - jekyll-default-layout
 
-theme: niklasbuschmann/contrast
+theme: jekyll-theme-architect
 
 # For any extra visual customization, you can include additional CSS files in every page on your site. List any custom CSS files here
 #site-css:
