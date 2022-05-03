@@ -225,6 +225,7 @@ d %>%
   pander()
 ```
 <br>
+
 ### Median Home Value change from 1990 to 2000 and 2000 to 2010
 <br>
 From 1990-2000 the median home value increased from $113,446 to $119,900, while the mean value decreased from $147,601 to $144,738 during the same period. The 2000-2010 period saw an increase from $119,000 to 193,200 as well as a dramatic mean increase from $144,738 to $246,570.
