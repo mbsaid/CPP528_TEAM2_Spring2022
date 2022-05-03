@@ -1,3 +1,7 @@
+---
+layout: page
+title: Read Me
+---
 # CPP-528
 CPP-528 Spring 2022 Session B
 <br>
