@@ -9,10 +9,10 @@ team:
     img: ../assets/images/IMG_0294.jpg
     desc: Sarah Johaningsmeir is a student in Arizona State University's Program Evaluation and Data Analytics MS program. She works as a researcher in the Complex Care Program at the Medical College of Wisconsin and Children's Wisconsin.
     github: https://github.com/johaning
-  - name: Ahmed Rashwan
+  - name: Ahmed Radwan
     img: ../assets/images/Ahmed radwan-edits.jpg
     desc: Ahmed Radwan is pursing his master’s in Program Evaluation and Data Analytics. He works as a data analyst at UnitedHealth Group.  
-    github: https://github.com/AhmedRashwanASU
+    github: https://github.com/radwan-a
   - name: Mohamed Said
     img: ../assets/images/mohamed.PNG
     desc: Mohamed Said works as Program officer and researcher for SIDRA Institute in Somalia. He is currently pursuing his Masters in Program Evaluation and Data Analytics at Arizona State University (ASU).             
