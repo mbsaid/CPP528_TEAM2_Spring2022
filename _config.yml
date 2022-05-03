@@ -18,7 +18,6 @@ navigation:                  # show navigation links in the header
   - index.md  # Landing page with Table of Contents
   - about.md
   - resources.md
-  - README.md
   
 icons:                       # show icons in the header, for all possible icons see http://fontawesome.io/icons/
   # envelope: "mailto:niklasbuschmann@users.noreply.github.com"
