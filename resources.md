@@ -13,4 +13,4 @@ subtitle: "Links to helpful resources."
   
   4) [Packages Used](renv.lock)
 
-  5) [References](https://github.com/ctmccull/CPP528_TEAM2_Spring2022/blob/main/bibliography.md)
+  5) [References](bibliography.md)
