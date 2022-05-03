@@ -1,5 +1,7 @@
-
-**Bibliography**
+---
+layout: page
+title: Bibliography
+---
   
 <br>
   
