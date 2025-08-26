@@ -15,7 +15,7 @@ team:
     github: https://github.com/radwan-a
   - name: Mohamed Said
     img: ../assets/images/mohamed.PNG
-    desc: Mohamed Said works as Project Coordinator and Researcher for SIDRA Institute in Somalia. He is currently pursuing his Masters in Program Evaluation and Data Analytics at Arizona State University (ASU).             
+    desc: Mohamed Said works as Researcher at SIDRA Institute in Somalia. He is currently pursuing his Masters in Program Evaluation and Data Analytics at Arizona State University (ASU).             
     github: https://github.com/mbsaid
 
 ---
